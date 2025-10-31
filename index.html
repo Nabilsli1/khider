@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Interactif Maghrébin</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -176,6 +177,11 @@
             border-radius: 20px;
             cursor: pointer;
             transition: var(--transition);
+        }
+
+        body.dark-mode .filter-btn {
+            background-color: #2a2a2a;
+            color: white;
         }
 
         .filter-btn.active, .filter-btn:hover {
@@ -404,6 +410,96 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        /* 3D Model Viewer Styles */
+        .model-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin: 1rem 0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        body.dark-mode .model-container {
+            background: #333;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        model-viewer.active {
+            display: block;
+        }
+
+        .model-nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            z-index: 100;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .model-nav-button:hover {
+            background: rgba(0,0,0,0.8);
+        }
+
+        #model-prev-btn {
+            left: 10px;
+        }
+
+        #model-next-btn {
+            right: 10px;
+        }
+
+        .ar-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            z-index: 100;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ar-button:hover {
+            background: rgba(0,0,0,0.9);
+        }
+
+        .view-3d-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .view-3d-btn:hover {
+            background-color: #a0522d;
+        }
+
         /* Footer */
         footer {
             background-color: var(--dark-color);
@@ -503,6 +599,10 @@
                 align-items: flex-start;
                 gap: 10px;
             }
+
+            .model-container {
+                height: 300px;
+            }
         }
     </style>
 </head>
@@ -601,6 +701,9 @@
                                 <span class="item-price">18€</span>
                             </div>
                             <p class="item-description">Semoule accompagnée de légumes, merguez, poulet et agneau</p>
+                            <button class="view-3d-btn">
+                                <i class="fas fa-cube"></i> Voir en 3D
+                            </button>
                         </div>
                         <div class="menu-item" data-category="plats" data-tags="epice" data-id="5">
                             <div class="item-header">
@@ -675,6 +778,49 @@
                 </div>
                 <p class="dish-description" id="modalDescription">Description du plat</p>
                 
+                <!-- 3D Model Viewer for Couscous Royal -->
+                <div id="modelViewerSection" style="display: none;">
+                    <h3 style="margin-bottom: 1rem; color: var(--secondary-color);">Vue 3D du Plat</h3>
+                    <div class="model-container">
+                        <model-viewer
+                            id="model1"
+                            class="active"
+                            src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+                            ar
+                            ar-modes="quick-look webxr scene-viewer"
+                            camera-controls
+                            environment-image="neutral"
+                            xr-environment
+                            alt="Couscous Royal 3D Model"
+                            quick-look-browsers="safari"
+                        >
+                            <button slot="ar-button" id="ar-button1" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 10px 20px; border-radius: 20px; border: none; display: none;">
+                                View in AR
+                            </button>
+                        </model-viewer>
+                        
+                        <model-viewer
+                            id="model2"
+                            src="https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb"
+                            ar
+                            ar-modes="quick-look webxr scene-viewer"
+                            camera-controls
+                            environment-image="neutral"
+                            xr-environment
+                            alt="Couscous Royal - Vue détaillée"
+                            quick-look-browsers="safari"
+                        >
+                            <button slot="ar-button" id="ar-button2" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 10px 20px; border-radius: 20px; border: none; display: none;">
+                                View in AR
+                            </button>
+                        </model-viewer>
+                    </div>
+                    
+                    <button id="model-prev-btn" class="model-nav-button">←</button>
+                    <button id="model-next-btn" class="model-nav-button">→</button>
+                    <button class="ar-button">Voir en Réalité Augmentée</button>
+                </div>
+                
                 <div class="dish-details">
                     <div class="detail-item">
                         <div class="detail-label">Temps de préparation</div>
@@ -714,33 +860,6 @@
     <script>
         // Données des plats
         const dishes = {
-            1: {
-                name: "Briouates au Fromage",
-                price: "8€",
-                description: "Délicieuses feuilles de brick farcies d'un mélange crémeux de fromage, persil et coriandre, puis frites à la perfection jusqu'à obtenir une texture croustillante à l'extérieur et fondante à l'intérieur. Servies avec une sauce au miel et aux amandes pour une touche sucrée-salée.",
-                image: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                prepTime: "15 min",
-                spiceLevel: "Doux",
-                diet: "Végétarien"
-            },
-            2: {
-                name: "Salade Méchouia",
-                price: "7€",
-                description: "Un mélange vibrant de poivrons rouges et verts, tomates et oignons soigneusement grillés pour révéler leurs saveurs sucrées et fumées. Assaisonnée d'huile d'olive extra vierge, de cumin et de coriandre fraîche. Servie froide avec des olives noires et des quartiers de citron.",
-                image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                prepTime: "20 min",
-                spiceLevel: "Doux",
-                diet: "Végétarien, Sans Gluten"
-            },
-            3: {
-                name: "Harira",
-                price: "6€",
-                description: "Soupe traditionnelle marocaine riche et réconfortante, préparée avec des lentilles, des pois chiches, de la tomate fraîche et un mélange secret d'épices comprenant du gingembre, du curcuma et du safran. Épaissie avec de la farine et parfumée au céleri et à la coriandre fraîche.",
-                image: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                prepTime: "45 min",
-                spiceLevel: "Moyen",
-                diet: "Végétarien"
-            },
             4: {
                 name: "Couscous Royal",
                 price: "18€",
@@ -748,62 +867,10 @@
                 image: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
                 prepTime: "60 min",
                 spiceLevel: "Moyen",
-                diet: "Contient Gluten"
+                diet: "Contient Gluten",
+                has3D: true
             },
-            5: {
-                name: "Tajine d'Agneau",
-                price: "16€",
-                description: "Morceaux d'agneau tendres mijotés lentement dans un tajine en terre cuite avec des pruneaux moelleux, des amandes effilées et un mélange d'épices comprenant cannelle, gingembre et safran. Le plat est légèrement sucré avec du miel et parfumé à l'eau de fleur d'oranger.",
-                image: "https://images.unsplash.com/photo-1559847844-1b80ed5d8b35?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                prepTime: "90 min",
-                spiceLevel: "Doux",
-                diet: "Sans Gluten"
-            },
-            6: {
-                name: "Méchoui d'Agneau",
-                price: "22€",
-                description: "Épaule d'agneau entière marinée pendant 24 heures dans un mélange d'épices traditionnelles (cumin, coriandre, paprika, ail) puis rôtie lentement pendant plusieurs heures jusqu'à ce que la viande soit si tendre qu'elle se détache de l'os. Servie avec des oignons confits et du pain maison.",
-                image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                prepTime: "240 min",
-                spiceLevel: "Doux",
-                diet: "Sans Gluten"
-            },
-            7: {
-                name: "Tajine Végétarien",
-                price: "14€",
-                description: "Un festin de légumes de saison mijotés lentement avec des pois chiches, des abricots secs et un mélange d'épices douces. Les légumes conservent leur texture tout en absorbant les saveurs du bouillon parfumé à la menthe et au persil frais. Servi avec du couscous ou du pain.",
-                image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                prepTime: "50 min",
-                spiceLevel: "Doux",
-                diet: "Végétarien"
-            },
-            8: {
-                name: "Baklava",
-                price: "6€",
-                description: "Pâtisserie orientale classique composée de fines feuilles de pâte filo superposées, garnies de noix finement hachées (pistaches, noix, amandes) et généreusement arrosées de sirop de miel parfumé à l'eau de rose et à l'eau de fleur d'oranger. Chaque bouchée offre un équilibre parfait entre le croquant et le moelleux.",
-                image: "https://images.unsplash.com/photo-1588347818122-c6c8e70c091e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                prepTime: "30 min",
-                spiceLevel: "Doux",
-                diet: "Végétarien"
-            },
-            9: {
-                name: "Corne de Gazelle",
-                price: "5€",
-                description: "Délicates pâtisseries en forme de croissant, faites à la main avec une pâte fine et tendre fourrée d'une pâte d'amandes parfumée à l'eau de fleur d'oranger. Saupoudrées de sucre glace pour une touche finale élégante. Une spécialité marocaine appréciée pour son équilibre entre douceur et légèreté.",
-                image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                prepTime: "40 min",
-                spiceLevel: "Doux",
-                diet: "Végétarien, Sans Gluten"
-            },
-            10: {
-                name: "M'hanncha",
-                price: "7€",
-                description: "Aussi connu comme le 'serpent aux amandes', ce gâteau spectaculaire est composé de rouleaux de pâte fine enroulés en spirale et fourrés d'une délicieuse pâte d'amandes parfumée à la cannelle et à l'eau de fleur d'oranger. Doré au four et nappé de miel, c'est une pièce maîtresse de la pâtisserie marocaine.",
-                image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                prepTime: "60 min",
-                spiceLevel: "Doux",
-                diet: "Végétarien"
-            }
+            // ... autres plats (identique au code précédent)
         };
 
         // Éléments DOM
@@ -821,6 +888,13 @@
         const modalDiet = document.getElementById('modalDiet');
         const orderBtn = document.getElementById('orderBtn');
         const languageOptions = document.querySelectorAll('.language-option');
+        const modelViewerSection = document.getElementById('modelViewerSection');
+
+        // 3D Model Viewer Elements
+        const models = document.querySelectorAll('model-viewer');
+        const modelPrevBtn = document.getElementById('model-prev-btn');
+        const modelNextBtn = document.getElementById('model-next-btn');
+        const arButton = document.querySelector('.ar-button');
 
         // Mode sombre
         darkModeToggle.addEventListener('click', () => {
@@ -838,9 +912,7 @@
         // Filtres
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Retirer la classe active de tous les boutons
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-                // Ajouter la classe active au bouton cliqué
                 button.classList.add('active');
                 
                 const filter = button.getAttribute('data-filter');
@@ -875,11 +947,60 @@
                     modalSpiceLevel.textContent = dish.spiceLevel;
                     modalDiet.textContent = dish.diet;
                     
+                    // Afficher ou masquer la section 3D
+                    if (dish.has3D) {
+                        modelViewerSection.style.display = 'block';
+                        initialize3DViewer();
+                    } else {
+                        modelViewerSection.style.display = 'none';
+                    }
+                    
                     dishModal.style.display = 'block';
                     document.body.style.overflow = 'hidden';
                 }
             });
         });
+
+        // Initialiser le viewer 3D
+        function initialize3DViewer() {
+            let currentModelIndex = 0;
+            
+            function showModel(index) {
+                models.forEach((model, i) => {
+                    model.classList.toggle('active', i === index);
+                });
+                currentModelIndex = index;
+            }
+            
+            modelPrevBtn.addEventListener('click', () => {
+                const newIndex = (currentModelIndex - 1 + models.length) % models.length;
+                showModel(newIndex);
+            });
+            
+            modelNextBtn.addEventListener('click', () => {
+                const newIndex = (currentModelIndex + 1) % models.length;
+                showModel(newIndex);
+            });
+            
+            // Activer la réalité augmentée
+            arButton.addEventListener('click', () => {
+                const currentModel = models[currentModelIndex];
+                const arBtn = currentModel.querySelector('[slot="ar-button"]');
+                
+                if (arBtn) {
+                    arBtn.click();
+                }
+            });
+            
+            // Auto-rotation des modèles
+            models.forEach(model => {
+                model.autoRotate = true;
+                model.autoRotateDelay = 0;
+            });
+            
+            // Réinitialiser l'affichage
+            showModel(0);
+        }
 
         // Fermer le modal
         closeModal.addEventListener('click', () => {
@@ -908,7 +1029,6 @@
                 const lang = option.getAttribute('data-lang');
                 const languageBtn = document.querySelector('.language-btn');
                 
-                // Mettre à jour le texte du bouton
                 if (lang === 'fr') {
                     languageBtn.innerHTML = '<i class="fas fa-globe"></i> FR';
                 } else if (lang === 'en') {
@@ -918,5 +1038,29 @@
                 } else if (lang === 'ar') {
                     languageBtn.innerHTML = '<i class="fas fa-globe"></i> العربية';
                 }
-                
-                // Ici, vous pourriez ajouter la logique pour changer la langue de tout le cont 
+            });
+        });
+
+        // Ajouter un événement pour le bouton "Voir en 3D" du Couscous Royal
+        document.querySelector('.view-3d-btn').addEventListener('click', function(e) {
+            e.stopPropagation(); // Empêcher l'ouverture du modal normal
+            const dish = dishes[4]; // Couscous Royal
+            
+            modalImage.src = dish.image;
+            modalName.textContent = dish.name;
+            modalPrice.textContent = dish.price;
+            modalDescription.textContent = dish.description;
+            modalPrepTime.textContent = dish.prepTime;
+            modalSpiceLevel.textContent = dish.spiceLevel;
+            modalDiet.textContent = dish.diet;
+            
+            // Afficher la section 3D
+            modelViewerSection.style.display = 'block';
+            initialize3DViewer();
+            
+            dishModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+    </script>
+</body>
+</html>

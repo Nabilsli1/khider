@@ -428,39 +428,6 @@
         model-viewer {
             width: 100%;
             height: 100%;
-            display: none;
-        }
-
-        model-viewer.active {
-            display: block;
-        }
-
-        .model-nav-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 18px;
-            z-index: 100;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .model-nav-button:hover {
-            background: rgba(0,0,0,0.8);
-        }
-
-        #model-prev-btn {
-            left: 10px;
-        }
-
-        #model-next-btn {
-            right: 10px;
         }
 
         .ar-button {
@@ -470,16 +437,21 @@
             transform: translateX(-50%);
             background: rgba(0,0,0,0.7);
             color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 12px 24px;
+            border-radius: 25px;
             border: none;
             z-index: 100;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .ar-button:hover {
             background: rgba(0,0,0,0.9);
+            transform: translateX(-50%) scale(1.05);
         }
 
         .view-3d-btn {
@@ -494,10 +466,26 @@
             align-items: center;
             gap: 5px;
             transition: var(--transition);
+            font-size: 0.9rem;
         }
 
         .view-3d-btn:hover {
             background-color: #a0522d;
+            transform: translateY(-2px);
+        }
+
+        .ar-instructions {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+            padding: 10px;
+            background: rgba(193, 154, 107, 0.1);
+            border-radius: 5px;
+        }
+
+        body.dark-mode .ar-instructions {
+            color: #aaa;
         }
 
         /* Footer */
@@ -702,7 +690,7 @@
                             </div>
                             <p class="item-description">Semoule accompagnée de légumes, merguez, poulet et agneau</p>
                             <button class="view-3d-btn">
-                                <i class="fas fa-cube"></i> Voir en 3D
+                                <i class="fas fa-cube"></i> Voir en 3D et AR
                             </button>
                         </div>
                         <div class="menu-item" data-category="plats" data-tags="epice" data-id="5">
@@ -762,7 +750,7 @@
         </div>
     </section>
 
-    <!-- Dish Modal -->
+    <!-- Dish Modal with 3D Model -->
     <div class="modal" id="dishModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -780,45 +768,39 @@
                 
                 <!-- 3D Model Viewer for Couscous Royal -->
                 <div id="modelViewerSection" style="display: none;">
-                    <h3 style="margin-bottom: 1rem; color: var(--secondary-color);">Vue 3D du Plat</h3>
+                    <h3 style="margin-bottom: 1rem; color: var(--secondary-color);">
+                        <i class="fas fa-cube"></i> Vue 3D Interactive
+                    </h3>
+                    
                     <div class="model-container">
                         <model-viewer
-                            id="model1"
-                            class="active"
-                            src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+                            id="couscousModel"
+                            src="05_07_2025.glb" <!-- REMPLACEZ PAR VOTRE FICHIER .glb -->
                             ar
-                            ar-modes="quick-look webxr scene-viewer"
+                            ar-modes="quick-look scene-viewer webxr"
                             camera-controls
                             environment-image="neutral"
+                            auto-rotate
+                            camera-orbit="0deg 75deg 105%"
+                            interaction-prompt="none"
+                            alt="Modèle 3D du Couscous Royal"
                             xr-environment
-                            alt="Couscous Royal 3D Model"
-                            quick-look-browsers="safari"
+                            quick-look-browsers="safari chrome"
+                            ios-src="couscous-royal.usdz" <!-- OPTIONNEL : pour meilleure compatibilité iOS -->
                         >
-                            <button slot="ar-button" id="ar-button1" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 10px 20px; border-radius: 20px; border: none; display: none;">
-                                View in AR
-                            </button>
-                        </model-viewer>
-                        
-                        <model-viewer
-                            id="model2"
-                            src="https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb"
-                            ar
-                            ar-modes="quick-look webxr scene-viewer"
-                            camera-controls
-                            environment-image="neutral"
-                            xr-environment
-                            alt="Couscous Royal - Vue détaillée"
-                            quick-look-browsers="safari"
-                        >
-                            <button slot="ar-button" id="ar-button2" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 10px 20px; border-radius: 20px; border: none; display: none;">
-                                View in AR
+                            <!-- Bouton AR natif de model-viewer - IMPORTANT pour iOS -->
+                            <button slot="ar-button" class="ar-button">
+                                <i class="fas fa-camera"></i> Voir en Réalité Augmentée
                             </button>
                         </model-viewer>
                     </div>
                     
-                    <button id="model-prev-btn" class="model-nav-button">←</button>
-                    <button id="model-next-btn" class="model-nav-button">→</button>
-                    <button class="ar-button">Voir en Réalité Augmentée</button>
+                    <div class="ar-instructions">
+                        <p><strong>📱 Comment utiliser la réalité augmentée :</strong></p>
+                        <p>• iOS : Appuyez sur "Voir en Réalité Augmentée" → "Usdz" → L'appareil photo s'ouvrira</p>
+                        <p>• Android : Appuyez sur le bouton AR et pointez votre caméra</p>
+                        <p>• Faites glisser pour tourner, pincer pour zoomer</p>
+                    </div>
                 </div>
                 
                 <div class="dish-details">
@@ -870,7 +852,7 @@
                 diet: "Contient Gluten",
                 has3D: true
             },
-            // ... autres plats (identique au code précédent)
+            // ... autres plats
         };
 
         // Éléments DOM
@@ -889,12 +871,6 @@
         const orderBtn = document.getElementById('orderBtn');
         const languageOptions = document.querySelectorAll('.language-option');
         const modelViewerSection = document.getElementById('modelViewerSection');
-
-        // 3D Model Viewer Elements
-        const models = document.querySelectorAll('model-viewer');
-        const modelPrevBtn = document.getElementById('model-prev-btn');
-        const modelNextBtn = document.getElementById('model-next-btn');
-        const arButton = document.querySelector('.ar-button');
 
         // Mode sombre
         darkModeToggle.addEventListener('click', () => {
@@ -950,7 +926,6 @@
                     // Afficher ou masquer la section 3D
                     if (dish.has3D) {
                         modelViewerSection.style.display = 'block';
-                        initialize3DViewer();
                     } else {
                         modelViewerSection.style.display = 'none';
                     }
@@ -960,47 +935,6 @@
                 }
             });
         });
-
-        // Initialiser le viewer 3D
-        function initialize3DViewer() {
-            let currentModelIndex = 0;
-            
-            function showModel(index) {
-                models.forEach((model, i) => {
-                    model.classList.toggle('active', i === index);
-                });
-                currentModelIndex = index;
-            }
-            
-            modelPrevBtn.addEventListener('click', () => {
-                const newIndex = (currentModelIndex - 1 + models.length) % models.length;
-                showModel(newIndex);
-            });
-            
-            modelNextBtn.addEventListener('click', () => {
-                const newIndex = (currentModelIndex + 1) % models.length;
-                showModel(newIndex);
-            });
-            
-            // Activer la réalité augmentée
-            arButton.addEventListener('click', () => {
-                const currentModel = models[currentModelIndex];
-                const arBtn = currentModel.querySelector('[slot="ar-button"]');
-                
-                if (arBtn) {
-                    arBtn.click();
-                }
-            });
-            
-            // Auto-rotation des modèles
-            models.forEach(model => {
-                model.autoRotate = true;
-                model.autoRotateDelay = 0;
-            });
-            
-            // Réinitialiser l'affichage
-            showModel(0);
-        }
 
         // Fermer le modal
         closeModal.addEventListener('click', () => {
@@ -1056,11 +990,27 @@
             
             // Afficher la section 3D
             modelViewerSection.style.display = 'block';
-            initialize3DViewer();
             
             dishModal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         });
+
+        // Détection iOS pour améliorer l'expérience AR
+        function isIOS() {
+            return [
+                'iPad Simulator',
+                'iPhone Simulator',
+                'iPod Simulator',
+                'iPad',
+                'iPhone',
+                'iPod'
+            ].includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+        }
+
+        // Optimiser pour iOS
+        if (isIOS()) {
+            console.log("Appareil iOS détecté - Optimisation AR activée");
+        }
     </script>
 </body>
 </html>
